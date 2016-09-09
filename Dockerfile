@@ -1,6 +1,6 @@
 FROM segment/base:v4
 
-RUN apt-get install -y vim
+RUN apt-get install -y vim default-jre
 
 # Download and place Heka binaries
 ENV KAFKA_FILE_NAME kafka_2.11-0.10.0.1
@@ -10,7 +10,7 @@ ENV KAFKA_HOME /usr/local/kafka
 
 RUN cd /usr/local && \
     curl -LO $KAFKA_DOWNLOAD_URL && \
-    echo "$KAFKA_FILE_NAME.tar.gz" | xargs tar -zxf && \
+    echo "$KAFKA_FILE_NAME.tgz" | xargs tar -zxf && \
     mv $KAFKA_FILE_NAME kafka && \
     rm -rf $KAFKA_FILE_NAME.tar.gz
 
