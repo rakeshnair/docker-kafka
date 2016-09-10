@@ -5,6 +5,8 @@ services:
     image: raknair07/docker-kafka:1
     depends_on:
       - zookeeper
+    ports:
+      - "9092:9092"
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
