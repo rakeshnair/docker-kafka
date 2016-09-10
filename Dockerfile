@@ -21,7 +21,21 @@ COPY include/etc/kafka/log4j.properties /usr/local/etc/kafka
 
 RUN mkdir /usr/local/etc/init.d
 COPY include/kafka-start-all.sh /usr/local/etc/init.d/kafka-start-all.sh
-RUN chmod +x /usr/local/etc/init.d/kafka-start-all.sh
+COPY include/kafka-start.sh /usr/local/etc/init.d/kafka-start.sh
 
-CMD ["bash", "-C", "/usr/local/etc/init.d/kafka-start-all.sh"]
+# Replace broker id
+ENV BROKER_ID 0
+ENV KAFKA_CONFIGS_HOME /usr/local/etc/kafka
+ENV IP 192.168.131.197
+ENV ZK_PORT 2181
+
+RUN sed -ie "s/\(broker\.id=\).*/\1$BROKER_ID/" $KAFKA_CONFIGS_HOME/server.properties
+RUN sed -ie "s/\(zookeeper\.connect=\).*/\1$IP\:$ZK_PORT/" $KAFKA_CONFIGS_HOME/server.properties
+
+# Fix permissions for the Kafka startup scripts
+RUN chmod +x /usr/local/etc/init.d/kafka-start-all.sh
+RUN chmod +x /usr/local/etc/init.d/kafka-start.sh
+
+
+CMD ["bash", "-C", "/usr/local/etc/init.d/kafka-start.sh"]
 
