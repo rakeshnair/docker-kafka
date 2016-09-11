@@ -33,6 +33,7 @@ ENV KAFKA_PORT 9092
 RUN sed -ie "s/\(broker\.id=\).*/\1$BROKER_ID/" $KAFKA_CONFIGS_HOME/server.properties
 RUN sed -ie "s/\(zookeeper\.connect=\).*/\1$IP\:$ZK_PORT/" $KAFKA_CONFIGS_HOME/server.properties
 RUN sed -ie "s/\(#\)\(advertised\.listeners=PLAINTEXT\:\/\/\).*/\2$IP\:$KAFKA_PORT/" $KAFKA_CONFIGS_HOME/server.properties
+RUN sed -ie "s/\(#\)\(listeners=PLAINTEXT\:\/\/\).*/\2$IP\:0.0.0.0:9092/" $KAFKA_CONFIGS_HOME/server.properties
 
 # Fix permissions for the Kafka startup scripts
 RUN chmod +x /usr/local/etc/init.d/kafka-start-all.sh
